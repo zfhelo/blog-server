@@ -1,0 +1,7 @@
+${AnsiColor.RED}███    ███ ██    ██ ██████  ██       ██████   ██████ 
+${AnsiColor.BLUE}████  ████  ██  ██  ██   ██ ██      ██    ██ ██      
+${AnsiColor.YELLOW}██ ████ ██   ████   ██████  ██      ██    ██ ██   ███ 
+${AnsiColor.BRIGHT_CYAN}██  ██  ██    ██    ██   ██ ██      ██    ██ ██    ██ 
+${AnsiColor.BLACK}██      ██    ██    ██████  ███████  ██████   ██████  
+${AnsiColor.GREEN}                                                     
+${AnsiColor.CYAN}SpringBoot -V ${spring-boot.version}
