@@ -1,7 +1,7 @@
 package edu.gdpi.blogserver.service;
 
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.pagehelper.PageInfo;
 import edu.gdpi.blogserver.entity.Article;
 
 import java.util.List;
@@ -43,9 +43,9 @@ public interface ArticleService {
     /**
      * 分页查询
      *
-     * @param page
-     * @param size
+     * @param page 当前页面
+     * @param size 每页size
      * @return
      */
-    Page<Article> listPage(Integer page, Integer size);
+    PageInfo<Article> listPage(Integer page, Integer size);
 }

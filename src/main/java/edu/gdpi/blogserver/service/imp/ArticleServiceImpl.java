@@ -1,13 +1,15 @@
 package edu.gdpi.blogserver.service.imp;
 
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import edu.gdpi.blogserver.entity.Article;
 import edu.gdpi.blogserver.entity.Tag;
 import edu.gdpi.blogserver.mapper.ArticleMapper;
 import edu.gdpi.blogserver.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
+@Transactional(rollbackFor = Exception.class)
 public class ArticleServiceImpl implements ArticleService {
     @Resource
     private ArticleMapper articleMapper;
@@ -72,8 +75,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Page<Article> listPage(Integer page, Integer size) {
-        Page<Article> p = new Page<>(page, size);
-        return articleMapper.selectPage(p, null);
+    public PageInfo<Article> listPage(Integer page, Integer size) {
+        return PageHelper.startPage(page, size).doSelectPageInfo(() -> articleMapper.findAll());
     }
 }

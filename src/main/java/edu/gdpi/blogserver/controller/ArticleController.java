@@ -1,6 +1,6 @@
 package edu.gdpi.blogserver.controller;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.pagehelper.PageInfo;
 import edu.gdpi.blogserver.api.ResponseEntity;
 import edu.gdpi.blogserver.entity.A;
 import edu.gdpi.blogserver.entity.Article;
@@ -47,7 +47,7 @@ public class ArticleController {
 
     @GetMapping("/article/list/")
     public ResponseEntity listPage(@RequestParam(name = "page", defaultValue = "1") Integer page, @RequestParam(name = "size", defaultValue = "10") Integer size) {
-        Page<Article> listPage = articleService.listPage(page, size);
-        return ResponseEntity.success(listPage);
+        PageInfo<Article> pageInfo = articleService.listPage(page, size);
+        return ResponseEntity.success(pageInfo);
     }
 }
