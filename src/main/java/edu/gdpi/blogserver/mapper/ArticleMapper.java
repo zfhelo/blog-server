@@ -39,11 +39,17 @@ public interface ArticleMapper extends BaseMapper<Article> {
     @Select("SELECT t.* FROM bind_article_tag b, tag t WHERE b.article_id = #{aid} AND t.id = b.tag_id")
     List<Tag> findTagsByArticleId(Long aid);
 
+    /**
+     * 查询所有文章
+     *
+     * @return
+     */
     @Select(value = "SELECT * FROM article")
     @Results({
             @Result(id = true, column = "id", property = "id"),
             @Result(property = "tags", column = "id",
-                    many = @Many(select = "edu.gdpi.blogserver.mapper.ArticleMapper.findTagsByArticleId"))
+                    many = @Many(select = "edu.gdpi.blogserver.mapper.ArticleMapper.findTagsByArticleId")),
+            @Result(property = "category", column = "category_id", one = @One(select = "edu.gdpi.blogserver.mapper.CategoryMapper.selectById"))
     })
     List<Article> findAll();
 }

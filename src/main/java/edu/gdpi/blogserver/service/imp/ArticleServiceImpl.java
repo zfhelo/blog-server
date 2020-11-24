@@ -1,6 +1,7 @@
 package edu.gdpi.blogserver.service.imp;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import edu.gdpi.blogserver.entity.Article;
@@ -77,5 +78,17 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public PageInfo<Article> listPage(Integer page, Integer size) {
         return PageHelper.startPage(page, size).doSelectPageInfo(() -> articleMapper.findAll());
+    }
+
+    @Override
+    public List<Article> findTitleLike(String pattern) {
+        QueryWrapper<Article> query = new QueryWrapper<>();
+        query.like("title", pattern);
+        return articleMapper.selectList(query);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        articleMapper.deleteById(id);
     }
 }

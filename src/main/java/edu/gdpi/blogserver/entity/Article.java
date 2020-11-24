@@ -29,4 +29,6 @@ public class Article implements Serializable {
 
     @TableField(exist = false)
     private List<Tag> tags;
+    @TableField(exist = false)
+    private Category category;
 }

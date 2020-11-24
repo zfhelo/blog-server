@@ -8,6 +8,7 @@ import edu.gdpi.blogserver.service.ArticleService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author ZhengHaiFeng
@@ -45,9 +46,21 @@ public class ArticleController {
         return ResponseEntity.success(a.getTid());
     }
 
-    @GetMapping("/article/list/")
+    @GetMapping("/article/list")
     public ResponseEntity listPage(@RequestParam(name = "page", defaultValue = "1") Integer page, @RequestParam(name = "size", defaultValue = "10") Integer size) {
         PageInfo<Article> pageInfo = articleService.listPage(page, size);
         return ResponseEntity.success(pageInfo);
+    }
+
+    @GetMapping("/article/title/like")
+    public ResponseEntity titleLike(String key) {
+        List<Article> articles = articleService.findTitleLike(key);
+        return ResponseEntity.success(articles);
+    }
+
+    @DeleteMapping("/article/{id:\\d+}")
+    public ResponseEntity deleteArticle(@PathVariable Long id) {
+        articleService.deleteById(id);
+        return ResponseEntity.success(null);
     }
 }

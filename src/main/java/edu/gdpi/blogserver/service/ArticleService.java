@@ -48,4 +48,13 @@ public interface ArticleService {
      * @return
      */
     PageInfo<Article> listPage(Integer page, Integer size);
+
+    List<Article> findTitleLike(String pattern);
+
+    /**
+     * 删除文章
+     *
+     * @param id 文章id
+     */
+    void deleteById(Long id);
 }

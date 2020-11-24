@@ -16,6 +16,7 @@ public class User implements Serializable {
     private String username;
     private String password;
     private String email;
+    private String phone;
     private Boolean isValid;
     @TableField(exist = false)
     private List<Authority> authorities;
