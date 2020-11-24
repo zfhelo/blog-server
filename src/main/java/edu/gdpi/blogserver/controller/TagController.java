@@ -26,7 +26,7 @@ public class TagController {
     }
 
     @PostMapping("/tag")
-    @ApiOperation(value = "查询所有标签")
+    @ApiOperation(value = "创建标签")
     public ResponseEntity save(@RequestBody Tag tag) {
         tag.setId(null);
         tagService.save(tag);

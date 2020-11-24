@@ -1,5 +1,7 @@
 package edu.gdpi.blogserver.service;
 
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import edu.gdpi.blogserver.entity.Article;
 
 import java.util.List;
@@ -16,18 +18,34 @@ public interface ArticleService {
     void save(Article article);
 
     /**
-     * 给文章添加标签
+     * 更新文章
      *
      * @param aid 文章id
      * @param tid 标签id
      */
-    void addTags(Long aid, List<Long> tid);
+    void updateTags(Long aid, List<Long> tid);
 
     /**
-     * 给文章添加类别
+     * 通过 id 查找文章
      *
-     * @param aid 文章id
-     * @param cid 类别id
+     * @param id 文章id
+     * @return 文章
      */
-    void addCategory(Long aid, List<Long> cid);
+    Article findById(Long id);
+
+    /**
+     * 更新文章
+     *
+     * @param article
+     */
+    void update(Article article);
+
+    /**
+     * 分页查询
+     *
+     * @param page
+     * @param size
+     * @return
+     */
+    Page<Article> listPage(Integer page, Integer size);
 }

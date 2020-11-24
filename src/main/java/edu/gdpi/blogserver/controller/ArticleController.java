@@ -1,13 +1,11 @@
 package edu.gdpi.blogserver.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import edu.gdpi.blogserver.api.ResponseEntity;
 import edu.gdpi.blogserver.entity.A;
 import edu.gdpi.blogserver.entity.Article;
 import edu.gdpi.blogserver.service.ArticleService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -28,15 +26,28 @@ public class ArticleController {
         return ResponseEntity.success(article);
     }
 
+    @PostMapping("/article/{id:\\d+}")
+    public ResponseEntity update(@RequestBody Article article, @PathVariable Long id) {
+        article.setId(id);
+        articleService.update(article);
+        return ResponseEntity.success(article);
+    }
+
+    @GetMapping("/article/{id:\\d+}")
+    public ResponseEntity findById(@PathVariable Long id) {
+        Article article = articleService.findById(id);
+        return ResponseEntity.success(article);
+    }
+
     @PostMapping("/article/tags")
-    public ResponseEntity addTags(@RequestBody A a) {
-        articleService.addTags(a.getAid(), a.getTid());
+    public ResponseEntity updateTags(@RequestBody A a) {
+        articleService.updateTags(a.getAid(), a.getTid());
         return ResponseEntity.success(a.getTid());
     }
 
-    @PostMapping("/article/categories")
-    public ResponseEntity addCategory(@RequestBody A a) {
-        articleService.addCategory(a.getAid(), a.getCid());
-        return ResponseEntity.success(a.getCid());
+    @GetMapping("/article/list/")
+    public ResponseEntity listPage(@RequestParam(name = "page", defaultValue = "1") Integer page, @RequestParam(name = "size", defaultValue = "10") Integer size) {
+        Page<Article> listPage = articleService.listPage(page, size);
+        return ResponseEntity.success(listPage);
     }
 }

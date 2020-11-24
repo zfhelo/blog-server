@@ -1,7 +1,8 @@
 package edu.gdpi.blogserver.service.imp;
 
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import edu.gdpi.blogserver.entity.Article;
-import edu.gdpi.blogserver.entity.Category;
 import edu.gdpi.blogserver.entity.Tag;
 import edu.gdpi.blogserver.mapper.ArticleMapper;
 import edu.gdpi.blogserver.service.ArticleService;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,28 +30,50 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void addTags(Long aid, List<Long> tid) {
+    public void updateTags(Long aid, List<Long> tid) {
         // 查询文章的所有标签
-        List<Long> collect = articleMapper.findTagsByArticleId(aid)
+        List<Long> old = articleMapper.findTagsByArticleId(aid)
                 .stream()
                 .map(Tag::getId).collect(Collectors.toList());
-        tid.removeAll(collect);
+
+        ArrayList<Object> t = new ArrayList<>(old);
+        old.removeAll(tid);
+        // 删除标签
+        old.forEach(id -> {
+            log.info("文章id {} 删除标签id {}", aid, id);
+            articleMapper.deleteTag(aid, id);
+        });
+
+        tid.removeAll(t);
+        // 添加标签
         tid.forEach(id -> {
             log.info("为文章id {} 添加标签id {}", aid, id);
             articleMapper.addTag(aid, id);
         });
+
     }
 
     @Override
-    public void addCategory(Long aid, List<Long> cid) {
-        // 查询文章的所有标签
-        List<Long> collect = articleMapper.findCategoryByArticleId(aid)
-                .stream()
-                .map(Category::getId).collect(Collectors.toList());
-        cid.removeAll(collect);
-        cid.forEach(id -> {
-            log.info("为文章id {} 添加类别id {}", aid, id);
-            articleMapper.addCategory(aid, id);
-        });
+    public Article findById(Long id) {
+        log.info("查询文章 {}", id);
+        Article article = articleMapper.selectById(id);
+        if (article == null) {
+            throw new RuntimeException("没有该文章 {" + id + "}");
+        }
+        List<Tag> tags = articleMapper.findTagsByArticleId(id);
+        article.setTags(tags);
+        return article;
+    }
+
+    @Override
+    public void update(Article article) {
+        log.info("更新文章 {} ", article.getId());
+        articleMapper.updateById(article);
+    }
+
+    @Override
+    public Page<Article> listPage(Integer page, Integer size) {
+        Page<Article> p = new Page<>(page, size);
+        return articleMapper.selectPage(p, null);
     }
 }

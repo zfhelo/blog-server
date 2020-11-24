@@ -2,12 +2,8 @@ package edu.gdpi.blogserver.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import edu.gdpi.blogserver.entity.Article;
-import edu.gdpi.blogserver.entity.Category;
 import edu.gdpi.blogserver.entity.Tag;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -25,15 +21,15 @@ public interface ArticleMapper extends BaseMapper<Article> {
     @Insert("INSERT INTO bind_article_tag(article_id, tag_id) VALUES(#{aid}, #{tid})")
     void addTag(@Param("aid") Long aid, @Param("tid") Long tid);
 
-
     /**
-     * 给文章添加分类
+     * 删除文章标签
      *
-     * @param aid
-     * @param cid
+     * @param aid 文章id
+     * @param tid 标签id
      */
-    @Insert("INSERT INTO bind_article_category(article_id, category_id) VALUES(#{aid}, #{cid})")
-    void addCategory(@Param("aid") Long aid, @Param("cid") Long cid);
+    @Delete("DELETE FROM bind_article_tag WHERE article_id = #{aid} AND tag_id = #{tid}")
+    void deleteTag(@Param("aid") Long aid, @Param("tid") Long tid);
+
 
     /**
      * 查询文章所有标签
@@ -44,12 +40,10 @@ public interface ArticleMapper extends BaseMapper<Article> {
     @Select("SELECT t.* FROM bind_article_tag b, tag t WHERE b.article_id = #{aid} AND t.id = b.tag_id")
     List<Tag> findTagsByArticleId(Long aid);
 
-    /**
-     * 查询文章所有类别
-     *
-     * @param aid
-     * @return
-     */
-    @Select("SELECT c.* FROM bind_article_category b, category c WHERE b.article_id = #{aid} AND c.id = b.category_id")
-    List<Category> findCategoryByArticleId(Long aid);
+    @Select(value = "SELECT * FROM article")
+    @Results({
+            @Result(property = "tags", column = "id",
+                    many = @Many(select = "edu.gdpi.blogserver.mapper.ArticleMapper.findTagsByArticleId"))
+    })
+    List<Article> findAll();
 }

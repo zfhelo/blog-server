@@ -20,13 +20,13 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping("/categories")
-    @ApiOperation(value = "查询所有标签")
+    @ApiOperation(value = "查询所有类别")
     public ResponseEntity selectAll() {
         return ResponseEntity.success(categoryService.findAll());
     }
 
     @PostMapping("/category")
-    @ApiOperation(value = "查询所有标签")
+    @ApiOperation(value = "创建标签")
     public ResponseEntity save(@RequestBody Category cate) {
         cate.setId(null);
         categoryService.save(cate);
