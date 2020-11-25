@@ -14,53 +14,66 @@ import java.util.List;
  * @author ZhengHaiFeng
  */
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/api")
 public class ArticleController {
 
     @Resource
     private ArticleService articleService;
 
-    @PostMapping("/article")
+    @PostMapping("/admin/article")
     public ResponseEntity save(@RequestBody Article article) {
         article.setId(null);
         articleService.save(article);
         return ResponseEntity.success(article);
     }
 
-    @PostMapping("/article/{id:\\d+}")
+    @PostMapping("/admin/article/{id:\\d+}")
     public ResponseEntity update(@RequestBody Article article, @PathVariable Long id) {
         article.setId(id);
         articleService.update(article);
         return ResponseEntity.success(article);
     }
 
-    @GetMapping("/article/{id:\\d+}")
+    @GetMapping("/admin/article/{id:\\d+}")
     public ResponseEntity findById(@PathVariable Long id) {
         Article article = articleService.findById(id);
         return ResponseEntity.success(article);
     }
 
-    @PostMapping("/article/tags")
+    @PostMapping("/admin/article/tags")
     public ResponseEntity updateTags(@RequestBody A a) {
         articleService.updateTags(a.getAid(), a.getTid());
         return ResponseEntity.success(a.getTid());
     }
 
-    @GetMapping("/article/list")
+    @GetMapping("/admin/article/list")
     public ResponseEntity listPage(@RequestParam(name = "page", defaultValue = "1") Integer page, @RequestParam(name = "size", defaultValue = "10") Integer size) {
         PageInfo<Article> pageInfo = articleService.listPage(page, size);
         return ResponseEntity.success(pageInfo);
     }
 
-    @GetMapping("/article/title/like")
+    @GetMapping("/admin/article/title/like")
     public ResponseEntity titleLike(String key) {
         List<Article> articles = articleService.findTitleLike(key);
         return ResponseEntity.success(articles);
     }
 
-    @DeleteMapping("/article/{id:\\d+}")
+    @DeleteMapping("/admin/article/{id:\\d+}")
     public ResponseEntity deleteArticle(@PathVariable Long id) {
         articleService.deleteById(id);
         return ResponseEntity.success(null);
     }
+
+    @GetMapping("/guest/article/{id:\\d+}")
+    public ResponseEntity listPage(@PathVariable Long id) {
+        return null;
+    }
+
+
+    @GetMapping("/guest/article/list")
+    public ResponseEntity listPageForGuest(@RequestParam(name = "page", defaultValue = "1") Integer page, @RequestParam(name = "size", defaultValue = "10") Integer size) {
+        PageInfo<Article> pageInfo = articleService.listPage(page, size);
+        return ResponseEntity.success(pageInfo);
+    }
+
 }

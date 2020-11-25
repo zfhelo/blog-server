@@ -44,7 +44,7 @@ public interface ArticleMapper extends BaseMapper<Article> {
      *
      * @return
      */
-    @Select(value = "SELECT * FROM article")
+    @Select(value = "SELECT * FROM article ORDER BY send_time DESC")
     @Results({
             @Result(id = true, column = "id", property = "id"),
             @Result(property = "tags", column = "id",

@@ -12,12 +12,12 @@ import javax.annotation.Resource;
  * @author ZhengHaiFeng
  */
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/api")
 public class CommentController {
     @Resource
     private CommentService commentService;
 
-    @GetMapping("/comment/list")
+    @GetMapping("/admin/comment/list")
     public ResponseEntity listPage(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "5") int size,
@@ -26,7 +26,7 @@ public class CommentController {
         return ResponseEntity.success(pageInfo);
     }
 
-    @DeleteMapping("/comment/{id:\\d+}")
+    @DeleteMapping("/admin/comment/{id:\\d+}")
     public ResponseEntity deleteComment(@PathVariable Long id) {
         commentService.deleteComment(id);
         return ResponseEntity.success(null);
