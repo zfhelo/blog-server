@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import edu.gdpi.blogserver.entity.Article;
+import edu.gdpi.blogserver.entity.Category;
 import edu.gdpi.blogserver.entity.Tag;
 import edu.gdpi.blogserver.mapper.ArticleMapper;
+import edu.gdpi.blogserver.mapper.CategoryMapper;
 import edu.gdpi.blogserver.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,8 @@ import java.util.stream.Collectors;
 public class ArticleServiceImpl implements ArticleService {
     @Resource
     private ArticleMapper articleMapper;
+    @Resource
+    private CategoryMapper categoryMapper;
 
 
     @Override
@@ -65,6 +69,8 @@ public class ArticleServiceImpl implements ArticleService {
             throw new RuntimeException("没有该文章 {" + id + "}");
         }
         List<Tag> tags = articleMapper.findTagsByArticleId(id);
+        Category category = categoryMapper.selectById(article.getCategoryId());
+        article.setCategory(category);
         article.setTags(tags);
         return article;
     }

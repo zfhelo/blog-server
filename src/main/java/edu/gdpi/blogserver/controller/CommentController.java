@@ -4,6 +4,8 @@ import com.github.pagehelper.PageInfo;
 import edu.gdpi.blogserver.api.ResponseEntity;
 import edu.gdpi.blogserver.entity.Comment;
 import edu.gdpi.blogserver.service.CommentService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -30,5 +32,11 @@ public class CommentController {
     public ResponseEntity deleteComment(@PathVariable Long id) {
         commentService.deleteComment(id);
         return ResponseEntity.success(null);
+    }
+
+    @PostMapping("/guest/comment/{id:\\d+}")
+    public ResponseEntity comment(@RequestBody Comment comment, @AuthenticationPrincipal UserDetails userDetails) {
+        System.out.println(userDetails.getUsername());
+        return null;
     }
 }

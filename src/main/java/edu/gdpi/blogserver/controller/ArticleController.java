@@ -65,8 +65,9 @@ public class ArticleController {
     }
 
     @GetMapping("/guest/article/{id:\\d+}")
-    public ResponseEntity listPage(@PathVariable Long id) {
-        return null;
+    public ResponseEntity findByIdForGuest(@PathVariable Long id) {
+        Article article = articleService.findById(id);
+        return ResponseEntity.success(article);
     }
 
 
