@@ -28,6 +28,10 @@ public class JwtUser implements UserDetails {
                 .collect(Collectors.toList());
     }
 
+    public Long getId() {
+        return id;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.authorities;

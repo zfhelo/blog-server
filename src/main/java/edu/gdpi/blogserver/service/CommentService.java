@@ -23,4 +23,11 @@ public interface CommentService {
      * @param id
      */
     void deleteComment(Long id);
+
+    /**
+     * 发送评论
+     *
+     * @param comment
+     */
+    void postComment(Comment comment);
 }

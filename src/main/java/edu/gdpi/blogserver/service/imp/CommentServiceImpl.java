@@ -35,4 +35,10 @@ public class CommentServiceImpl implements CommentService {
     public void deleteComment(Long id) {
         commentMapper.deleteById(id);
     }
+
+    @Override
+    public void postComment(Comment comment) {
+        log.info("添加评论 用户 id: {} IP: {}, 文章 id: {}", comment.getUserId(), comment.getIp(), comment.getArticleId());
+        commentMapper.insert(comment);
+    }
 }

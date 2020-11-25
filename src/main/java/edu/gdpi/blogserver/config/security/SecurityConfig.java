@@ -48,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/login").permitAll()
                 .antMatchers("/api/admin/**").hasRole("admin")
                 .antMatchers(HttpMethod.POST, "/api/guest/comment/*").hasAnyRole("admin", "guest")
-                .antMatchers("/api/guest/**").permitAll()
+                .antMatchers("/api/guest/**", "/api/public/**").permitAll()
                 .anyRequest().authenticated()
                 .and().formLogin().loginProcessingUrl("/api/login")
                 .successHandler(successHandler)
