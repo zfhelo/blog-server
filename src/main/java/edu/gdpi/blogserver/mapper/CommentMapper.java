@@ -16,7 +16,7 @@ public interface CommentMapper extends BaseMapper<Comment> {
      *
      * @return
      */
-    @Select(value = "SELECT * FROM comment")
+    @Select(value = "SELECT * FROM comment ORDER BY create_time DESC")
     @Results({
             @Result(id = true, column = "id", property = "id"),
             @Result(property = "user", column = "user_id", one = @One(select = "edu.gdpi.blogserver.mapper.UserMapper.selectById"))
@@ -29,7 +29,7 @@ public interface CommentMapper extends BaseMapper<Comment> {
      * @param id
      * @return
      */
-    @Select(value = "SELECT * FROM comment WHERE article_id = #{id}")
+    @Select(value = "SELECT * FROM comment WHERE article_id = #{id} ORDER BY create_time DESC")
     @Results({
             @Result(id = true, column = "id", property = "id"),
             @Result(property = "user", column = "user_id", one = @One(select = "edu.gdpi.blogserver.mapper.UserMapper.selectById"))

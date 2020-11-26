@@ -64,14 +64,14 @@ public class ArticleController {
         return ResponseEntity.success(null);
     }
 
-    @GetMapping("/guest/article/{id:\\d+}")
+    @GetMapping("/public/article/{id:\\d+}")
     public ResponseEntity findByIdForGuest(@PathVariable Long id) {
         Article article = articleService.findById(id);
         return ResponseEntity.success(article);
     }
 
 
-    @GetMapping("/guest/article/list")
+    @GetMapping("/public/article/list")
     public ResponseEntity listPageForGuest(@RequestParam(name = "page", defaultValue = "1") Integer page, @RequestParam(name = "size", defaultValue = "10") Integer size) {
         PageInfo<Article> pageInfo = articleService.listPage(page, size);
         return ResponseEntity.success(pageInfo);
