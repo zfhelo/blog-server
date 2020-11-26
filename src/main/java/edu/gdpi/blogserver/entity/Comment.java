@@ -23,6 +23,7 @@ public class Comment implements Serializable {
 
     @TableField(exist = false)
     private User user;
+    private User parentUser;
 
     private LocalDateTime createTime;
     private LocalDateTime updateTime;

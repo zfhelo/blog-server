@@ -2,10 +2,10 @@ package edu.gdpi.blogserver.config.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.gdpi.blogserver.api.ResponseEntity;
+import edu.gdpi.blogserver.entity.JwtUser;
 import edu.gdpi.blogserver.util.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Component;
@@ -31,14 +31,15 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
         WebAuthenticationDetails details = (WebAuthenticationDetails) authentication.getDetails();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        JwtUser userDetails = (JwtUser) authentication.getPrincipal();
 
         log.info("用户： {} 在 IP： {} 处登录，该用户拥有 {} 权限", userDetails.getUsername(), details.getRemoteAddress(), userDetails.getAuthorities());
 
-        Map<String, String> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("token", JwtUtils.createToken(userDetails.getUsername()));
         map.put("username", userDetails.getUsername());
         map.put("roles", userDetails.getAuthorities().toString());
+        map.put("id", userDetails.getId());
         String msg = ob.writeValueAsString(ResponseEntity.success(map));
         httpServletResponse.getOutputStream().write(msg.getBytes(StandardCharsets.UTF_8));
     }
