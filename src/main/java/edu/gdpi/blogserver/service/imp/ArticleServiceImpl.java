@@ -12,6 +12,10 @@ import edu.gdpi.blogserver.mapper.CategoryMapper;
 import edu.gdpi.blogserver.mapper.TagMapper;
 import edu.gdpi.blogserver.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +32,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @Transactional(rollbackFor = Exception.class)
+@CacheConfig(cacheNames = "article")
 public class ArticleServiceImpl implements ArticleService {
     @Resource
     private ArticleMapper articleMapper;
@@ -66,6 +71,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     }
 
+    @Cacheable(key = "#id")
     @Override
     public Article findById(Long id) {
         log.info("查询文章 {}", id);
@@ -80,6 +86,7 @@ public class ArticleServiceImpl implements ArticleService {
         return article;
     }
 
+    @CachePut(key = "#article.id")
     @Override
     public void update(Article article) {
         log.info("更新文章 {} ", article.getId());
@@ -98,6 +105,7 @@ public class ArticleServiceImpl implements ArticleService {
         return articleMapper.selectList(query);
     }
 
+    @CacheEvict(key = "#id")
     @Override
     public void deleteById(Long id) {
         articleMapper.deleteById(id);

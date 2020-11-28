@@ -38,10 +38,9 @@ public class JwtUtils {
      */
     public static String createToken(String username) throws UnsupportedEncodingException {
         Calendar instance = Calendar.getInstance();
-        instance.add(Calendar.DAY_OF_WEEK, 1);
+        instance.add(Calendar.DAY_OF_MONTH, 1);
         String token = JWT.create()
                 .withClaim("username", username)
-                .withClaim("role", "admin")
                 .withExpiresAt(instance.getTime())
                 .sign(Algorithm.HMAC256(KEY));
         return token;
