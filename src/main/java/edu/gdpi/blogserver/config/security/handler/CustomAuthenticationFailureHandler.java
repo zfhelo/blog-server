@@ -7,6 +7,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,11 +21,8 @@ import java.nio.charset.StandardCharsets;
  */
 @Component
 public class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler {
+    @Resource
     private ObjectMapper ob;
-
-    public CustomAuthenticationFailureHandler(ObjectMapper ob) {
-        this.ob = ob;
-    }
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {

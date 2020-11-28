@@ -14,18 +14,18 @@ import javax.annotation.Resource;
  */
 @Api("标签操作")
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/api/")
 public class TagController {
     @Resource
     private TagService tagService;
 
-    @GetMapping("/tags")
+    @GetMapping("/public/tags")
     @ApiOperation(value = "查询所有标签")
     public ResponseEntity findAll() {
         return ResponseEntity.success(tagService.findAll());
     }
 
-    @PostMapping("/tag")
+    @PostMapping("/admin/tag")
     @ApiOperation(value = "创建标签")
     public ResponseEntity save(@RequestBody Tag tag) {
         tag.setId(null);

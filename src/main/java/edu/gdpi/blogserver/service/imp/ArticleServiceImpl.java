@@ -9,6 +9,7 @@ import edu.gdpi.blogserver.entity.Category;
 import edu.gdpi.blogserver.entity.Tag;
 import edu.gdpi.blogserver.mapper.ArticleMapper;
 import edu.gdpi.blogserver.mapper.CategoryMapper;
+import edu.gdpi.blogserver.mapper.TagMapper;
 import edu.gdpi.blogserver.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -30,6 +33,8 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleMapper articleMapper;
     @Resource
     private CategoryMapper categoryMapper;
+    @Resource
+    private TagMapper tagMapper;
 
 
     @Override
@@ -96,5 +101,25 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void deleteById(Long id) {
         articleMapper.deleteById(id);
+    }
+
+
+    @Override
+    public Map<String, Object> listPageByTag(Integer page, Integer size, Long tagId) {
+        Tag tag = tagMapper.selectById(tagId);
+        if (tag == null) {
+            throw new RuntimeException("标签不存在");
+        }
+        PageInfo<Article> pageInfo = PageHelper.startPage(page, size).doSelectPageInfo(() -> articleMapper.findByTagId(tagId));
+        Map<Integer, List<Article>> listMap = pageInfo.getList()
+                .stream().collect(Collectors.groupingBy(article -> article.getSendTime().getYear()));
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("tag", tag);
+        map.put("total", pageInfo.getTotal());
+        map.put("pageNum", pageInfo.getPageNum());
+        map.put("pages", pageInfo.getPages());
+        map.put("list", listMap);
+        return map;
     }
 }

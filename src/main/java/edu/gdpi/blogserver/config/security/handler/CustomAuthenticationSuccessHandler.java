@@ -38,13 +38,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         Map<String, Object> map = new HashMap<>();
         map.put("token", JwtUtils.createToken(userDetails.getUsername()));
         map.put("username", userDetails.getUsername());
-        map.put("roles", userDetails.getAuthorities().toString());
+        map.put("roles", userDetails.getAuthorities());
         map.put("id", userDetails.getId());
         String msg = ob.writeValueAsString(ResponseEntity.success(map));
         httpServletResponse.getOutputStream().write(msg.getBytes(StandardCharsets.UTF_8));
-    }
-
-    public CustomAuthenticationSuccessHandler(ObjectMapper ob) {
-        this.ob = ob;
     }
 }

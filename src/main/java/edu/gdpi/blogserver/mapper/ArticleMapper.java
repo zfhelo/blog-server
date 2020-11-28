@@ -52,4 +52,8 @@ public interface ArticleMapper extends BaseMapper<Article> {
             @Result(property = "category", column = "category_id", one = @One(select = "edu.gdpi.blogserver.mapper.CategoryMapper.selectById"))
     })
     List<Article> findAll();
+
+
+    @Select(value = "SELECT a.id, a.title, a.send_time FROM article a, bind_article_tag t WHERE a.id = t.article_id AND t.tag_id = #{tid} ORDER BY a.send_time DESC")
+    List<Article> findByTagId(Long tid);
 }

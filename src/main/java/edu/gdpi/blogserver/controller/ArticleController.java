@@ -8,7 +8,10 @@ import edu.gdpi.blogserver.service.ArticleService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author ZhengHaiFeng
@@ -34,7 +37,7 @@ public class ArticleController {
         return ResponseEntity.success(article);
     }
 
-    @GetMapping("/admin/article/{id:\\d+}")
+    @GetMapping("/public/article/{id:\\d+}")
     public ResponseEntity findById(@PathVariable Long id) {
         Article article = articleService.findById(id);
         return ResponseEntity.success(article);
@@ -64,17 +67,41 @@ public class ArticleController {
         return ResponseEntity.success(null);
     }
 
-    @GetMapping("/public/article/{id:\\d+}")
-    public ResponseEntity findByIdForGuest(@PathVariable Long id) {
-        Article article = articleService.findById(id);
-        return ResponseEntity.success(article);
-    }
-
-
     @GetMapping("/public/article/list")
     public ResponseEntity listPageForGuest(@RequestParam(name = "page", defaultValue = "1") Integer page, @RequestParam(name = "size", defaultValue = "10") Integer size) {
         PageInfo<Article> pageInfo = articleService.listPage(page, size);
         return ResponseEntity.success(pageInfo);
+    }
+
+    @GetMapping("/public/article/archive/list")
+    public ResponseEntity listPageArchiveForGuest(@RequestParam(name = "page", defaultValue = "1") Integer page, @RequestParam(name = "size", defaultValue = "10") Integer size) {
+        PageInfo<Article> pageInfo = articleService.listPage(page, size);
+        Map<Integer, List<Article>> listMap = pageInfo.getList()
+                .stream().collect(Collectors.groupingBy(article -> article.getSendTime().getYear()));
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("total", pageInfo.getTotal());
+        map.put("pageNum", pageInfo.getPageNum());
+        map.put("pages", pageInfo.getPages());
+        map.put("list", listMap);
+        return ResponseEntity.success(map);
+    }
+
+    @GetMapping("/public/article/tag/{id:\\d+}")
+    public ResponseEntity listPageArticleByTag(@PathVariable Long id, @RequestParam(name = "page", defaultValue = "1") Integer page,
+                                               @RequestParam(name = "size", defaultValue = "10") Integer size) {
+        Map<String, Object> map = articleService.listPageByTag(page, size, id);
+        return ResponseEntity.success(map);
+    }
+
+    /**
+     * @param type 1(搜索标题) 2(搜索内容) 3(搜索分类) 4(搜索标签)
+     * @param key
+     * @return
+     */
+    @GetMapping
+    public ResponseEntity fuzzySearch(Integer type, String key) {
+        return null;
     }
 
 }

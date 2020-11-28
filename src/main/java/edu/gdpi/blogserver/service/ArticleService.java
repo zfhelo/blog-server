@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import edu.gdpi.blogserver.entity.Article;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ZhengHaiFeng
@@ -49,6 +50,12 @@ public interface ArticleService {
      */
     PageInfo<Article> listPage(Integer page, Integer size);
 
+    /**
+     * 根据文章标题模糊查询
+     *
+     * @param pattern
+     * @return
+     */
     List<Article> findTitleLike(String pattern);
 
     /**
@@ -57,4 +64,14 @@ public interface ArticleService {
      * @param id 文章id
      */
     void deleteById(Long id);
+
+    /**
+     * 查询某标签下的文章
+     *
+     * @param page
+     * @param size
+     * @param tagId
+     * @return
+     */
+    Map<String, Object> listPageByTag(Integer page, Integer size, Long tagId);
 }

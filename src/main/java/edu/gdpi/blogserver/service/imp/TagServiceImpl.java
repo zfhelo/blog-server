@@ -23,7 +23,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Tag> findAll() {
-        return tagMapper.selectList(null);
+        return tagMapper.findAll();
     }
 
     @Override
