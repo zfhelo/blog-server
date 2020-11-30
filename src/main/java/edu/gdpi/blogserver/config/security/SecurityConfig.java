@@ -65,7 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf()
                 .disable(); // CSRF跨站请求伪造关闭
-        http.addFilterBefore(new JwtAuthenticationFilter(userDetailsService), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthenticationFilter(userDetailsService, objectMapper), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

@@ -17,7 +17,7 @@ public class JwtUtils {
 
     private static final String TOKEN_SPLIT = "Bearer ";
 
-    private static final String KEY = "2423dfsdf23";
+    private static final String KEY = "&()@!$%^$F&##DFHW#%$&@!";
 
     private static JWTVerifier jwtVerifier;
 
@@ -38,7 +38,7 @@ public class JwtUtils {
      */
     public static String createToken(String username) throws UnsupportedEncodingException {
         Calendar instance = Calendar.getInstance();
-        instance.add(Calendar.DAY_OF_MONTH, 1);
+        instance.add(Calendar.WEEK_OF_MONTH, 1);
         String token = JWT.create()
                 .withClaim("username", username)
                 .withExpiresAt(instance.getTime())

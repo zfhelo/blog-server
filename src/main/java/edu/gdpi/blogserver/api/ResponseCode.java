@@ -10,6 +10,7 @@ public enum ResponseCode {
     FAILURE_NO_AUTH(4001, "未登录"),
     FAILURE_BAD_PARAM(4002, "参数错误"),
     FAILURE_ACCESS_DENIED(4003, "没有权限"),
+    TOKEN_EXPIRED(4004, "登录已过期"),
 
     // 服务端错误
     ERROR(5000, "失败");

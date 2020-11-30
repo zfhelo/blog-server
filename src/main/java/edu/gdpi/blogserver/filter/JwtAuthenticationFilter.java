@@ -1,5 +1,9 @@
 package edu.gdpi.blogserver.filter;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.gdpi.blogserver.api.ResponseCode;
+import edu.gdpi.blogserver.api.ResponseEntity;
 import edu.gdpi.blogserver.util.JwtUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author ZhengHaiFeng
@@ -21,9 +26,12 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private UserDetailsService userDetailsService;
+    private ObjectMapper objectMapper;
 
-    public JwtAuthenticationFilter(UserDetailsService userDetailsService) {
+    public JwtAuthenticationFilter(UserDetailsService userDetailsService, ObjectMapper objectMapper) {
         this.userDetailsService = userDetailsService;
+        this.objectMapper = objectMapper;
+
     }
 
 
@@ -32,10 +40,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String authorizationHeader = request.getHeader("Authorization");
         String username = null;
         String token = null;
-
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            token = authorizationHeader.replace("Bearer ", "");
-            username = JwtUtils.getUsername(token);
+        try {
+            if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+                token = authorizationHeader.replace("Bearer ", "");
+                username = JwtUtils.getUsername(token);
+            }
+        } catch (TokenExpiredException e) {
+            // token 过期
+            String rep = objectMapper.writeValueAsString(ResponseEntity.custom(ResponseCode.TOKEN_EXPIRED, null));
+            response.getOutputStream().write(rep.getBytes(StandardCharsets.UTF_8));
+            response.flushBuffer();
+            return;
         }
 
 
