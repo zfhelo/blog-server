@@ -88,9 +88,10 @@ public class ArticleServiceImpl implements ArticleService {
 
     @CachePut(key = "#article.id")
     @Override
-    public void update(Article article) {
+    public Article update(Article article) {
         log.info("更新文章 {} ", article.getId());
         articleMapper.updateById(article);
+        return findById(article.getId());
     }
 
     @Override

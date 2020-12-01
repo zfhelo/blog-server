@@ -38,8 +38,9 @@ public interface ArticleService {
      * 更新文章
      *
      * @param article
+     * @return
      */
-    void update(Article article);
+    Article update(Article article);
 
     /**
      * 分页查询
